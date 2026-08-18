@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+.next/
+out/
+
+# Env
+.env
+*.env.local
+
+# OS
+.DS_Store
+
+# Repo clones done at analysis-time
+/tmp/ctm_repos/

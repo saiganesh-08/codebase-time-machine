@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ctm-config
+data:
+  DATABASE_URL: "postgresql://ctm_user:ctm_password@postgres:5432/codebase_time_machine"
+  REDIS_URL: "redis://redis:6379/0"
+  ANTHROPIC_MODEL: "claude-sonnet-4-6"
+  REPO_CLONE_ROOT: "/tmp/ctm_repos"
+  NEXT_PUBLIC_API_URL: "http://backend:8000"

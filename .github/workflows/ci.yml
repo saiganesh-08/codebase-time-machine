@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Compile check (syntax + imports)
+        working-directory: backend
+        run: python -m py_compile app/*.py app/routers/*.py
+
+  frontend-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Type check
+        working-directory: frontend
+        run: npx tsc --noEmit
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+  self-analysis:
+    # Meta touch: run the dependency-graph builder against this repo's own
+    # Python code as a smoke test that the static analysis pipeline works.
+    runs-on: ubuntu-latest
+    needs: backend-checks
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: pip install -r requirements.txt
+
+      - name: Build dependency graph for this repo's own backend
+        working-directory: backend
+        run: |
+          python -c "
+          from app.ast_analyzer import build_dependency_graph
+          functions = build_dependency_graph('app')
+          print(f'Parsed {len(functions)} functions from the backend codebase.')
+          for name in list(functions)[:10]:
+              print(' -', name)
+          "
