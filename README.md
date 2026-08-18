@@ -68,7 +68,6 @@ the AI layer sits on top of real facts.
 
 ```bash
 cp .env.example .env
-# add your ANTHROPIC_API_KEY to .env
 
 docker compose up --build
 ```
