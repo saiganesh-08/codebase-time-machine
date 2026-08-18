@@ -21,17 +21,17 @@ the AI layer sits on top of real facts.
 ## Architecture
 
 ```
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   Next.js   │─────▶│   FastAPI     │─────▶│  PostgreSQL │
-│  (frontend) │      │   (backend)   │      │ (git history│
-└─────────────┘      └──────┬───────┘      │  + graph)   │
-                             │              └─────────────┘
-                      ┌──────┴───────┐
-                      │              │
-                ┌─────▼────┐   ┌─────▼──────┐
-                │  Redis    │   │  Anthropic │
-                │ (cache)   │   │  API (LLM) │
-                └───────────┘   └────────────┘
+┌─────────────┐      ┌────────────────┐      ┌─────────────┐
+│   Next.js   │ ───▶|    FastAPI     │────▶ │  PostgreSQL │
+│  (frontend) │      │   (backend)    │      │ (git history│
+└─────────────┘      └────────┬───────┘      │  + graph)   │
+                              │              └─────────────┘
+                      ┌───────┴────────┐
+                      │                │
+                ┌─────▼─────┐    ┌─────▼──────┐
+                │  Redis    │    │  Anthropic │
+                │ (cache)   │    │  API (LLM) │
+                └───────────┘    └────────────┘
 ```
 
 **Pipeline, when a repo is submitted:**
